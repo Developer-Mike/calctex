@@ -1,0 +1,11 @@
+{
+	"id": "calctex",
+	"name": "Calctex",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Calculate LaTeX formulas inside Obsidian.",
+	"author": "Mike",
+	"authorUrl": "https://developer-mike.vercel.app/",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}

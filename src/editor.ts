@@ -54,9 +54,17 @@ class CalctexHintRenderer implements PluginValue {
             let formulaLength = formula.replace("\n", "").length;
             let insertIndex = mathBegin + formulaLength;
             
+            const calculationEngine = new ComputeEngine();
+            calculationEngine.latexOptions = {
+              multiply: "*",
+              groupSeparator: "'",
+            };
+
             let formattedFormula = formula.trim().slice(0, -CALCULATE_TRIGGER_SYMBOL.length).trim();
-            let result = new ComputeEngine().parse(formattedFormula).evaluate().latex;
-            let resultString = ` ${result}`;
+            let result = calculationEngine.parse(formattedFormula).evaluate().latex;
+
+            var resultString = ` ${result}`;
+            if (result.toLowerCase().contains("error")) resultString = ` ⚡`;
 
             builder.add(
               insertIndex,

@@ -8,7 +8,7 @@ export class ResultWidget extends WidgetType {
   toDOM(view: EditorView): HTMLElement {
     const div = document.createElement("span");
 
-    div.style.color = "darkorange";
+    div.style.color = "var(--text-faint)";
     div.style.fontStyle = "oblique";
     div.style.fontSize = "smaller";
 

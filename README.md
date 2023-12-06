@@ -5,7 +5,9 @@ An [Obsidian](https://obsidian.md/) plugin that automatically calculates the sol
 To calculate the solution for a formula, simply add a `=` sign after the formula and the solution will be automatically calculated and displayed. If you want to write the solution to the document, just click on the solution.
 
 ## Installation
-1. Download the latest release from the releases page.
-2. Extract the zip file into `<vault>/.obsidian/plugins/`.
+Download it from the community plugins list
+OR
+1. Download the files from the latest release from the releases page.
+2. Put the files into `<vault>/.obsidian/plugins/calctex`.
 3. Reload Obsidian and enable the plugin in the settings.
 4. Enjoy!

@@ -58,10 +58,10 @@ class CalctexHintRenderer implements PluginValue {
             let previousLatexLines = latexContentLines.slice(0, latexContentLines.indexOf(focusedLatexLine));
 
             // If not ending with the trigger symbol
-            if (!focusedLatexLine.trim().endsWith(CALCULATE_TRIGGER_SYMBOL)) return;
+            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CALCULATE_TRIGGER_SYMBOL)) return;
 
             // Get the exact formula to calculate
-            let splitFormula = focusedLatexLine.split(CALCULATE_TRIGGER_SYMBOL).filter((part) => part.trim().length > 0);
+            let splitFormula = focusedLatexLine.split(CALCULATE_TRIGGER_SYMBOL).filter((part) => part.replace("\\\\", "").trim().length > 0);
             let formula = splitFormula[splitFormula.length - 1];
 
             // Create a new calculation engine
@@ -80,7 +80,6 @@ class CalctexHintRenderer implements PluginValue {
                 // Remove the last line break and align sign
                 let formattedPreviousLine = previousLine.replace("\\\\", "").replace("&", "")
                 let lineExpression = calculationEngine.parse(formattedPreviousLine).simplify();
-                console.log(lineExpression.latex);
 
                 let lineExpressionParts = lineExpression.latex.split("=");
                 if (lineExpressionParts.length <= 1) continue;
@@ -90,16 +89,14 @@ class CalctexHintRenderer implements PluginValue {
                 expression = expression.subs({
                   [lineExpressionParts[0].trim()]: jsonValue
                 });
-              } catch (e) {
-                console.log(e);
-              }
+              } catch (e) { console.error(e); }
             }
 
             // Calculate the expression
             let result = expression.isValid ? expression.evaluate().latex : "⚡";
 
             // Calculate the insertion index
-            let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.trimEnd().length + 1;
+            let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.replace("\\\\", "").trimEnd().length + 1;
 
             builder.add(
               insertIndex,

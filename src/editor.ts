@@ -12,8 +12,7 @@ import {
 } from "@codemirror/view";
 import { ResultWidget } from "src/widget";
 import { ComputeEngine } from '@cortex-js/compute-engine';
-
-const CALCULATE_TRIGGER_SYMBOL = "=";
+import CalctexPlugin from "./main";
 
 class CalctexHintRenderer implements PluginValue {
   decorations: DecorationSet;
@@ -58,10 +57,10 @@ class CalctexHintRenderer implements PluginValue {
             let previousLatexLines = latexContentLines.slice(0, latexContentLines.indexOf(focusedLatexLine));
 
             // If not ending with the trigger symbol
-            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CALCULATE_TRIGGER_SYMBOL)) return;
+            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString)) return;
 
             // Get the exact formula to calculate
-            let splitFormula = focusedLatexLine.split(CALCULATE_TRIGGER_SYMBOL).filter((part) => part.replace("\\\\", "").trim().length > 0);
+            let splitFormula = focusedLatexLine.split(CalctexPlugin.INSTANCE.settings.calculationTriggerString).filter((part) => part.replace("\\\\", "").trim().length > 0);
             let formula = splitFormula[splitFormula.length - 1];
 
             // Create a new calculation engine

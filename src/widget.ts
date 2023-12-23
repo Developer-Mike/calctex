@@ -1,4 +1,5 @@
 import { EditorView, WidgetType } from "@codemirror/view";
+import CalctexPlugin from "./main";
 
 export class ResultWidget extends WidgetType {
   insertLocation: number;
@@ -20,7 +21,7 @@ export class ResultWidget extends WidgetType {
 
     div.innerText = this.text;
     this.keyListener = (event) => {
-      if (event.key !== "Tab") return;
+      if (event.key !== CalctexPlugin.INSTANCE.settings.completionTriggerKey) return;
       event.preventDefault();
       this.insertToDOM();
     }

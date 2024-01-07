@@ -95,7 +95,8 @@ class CalctexHintRenderer implements PluginValue {
             let result = expression.isValid ? expression.evaluate().latex : "⚡";
 
             // Calculate the insertion index
-            let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.replace("\\\\", "").trimEnd().length + 1;
+            let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.replace("\\\\", "").trimEnd().length;
+            if (previousLatexLines.length > 0) insertIndex += 1; // Multiline formula with $$
 
             builder.add(
               insertIndex,

@@ -1,7 +1,7 @@
 {
 	"id": "calctex",
 	"name": "Calctex",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"minAppVersion": "0.15.0",
 	"description": "Calculate LaTeX formulas inside Obsidian.",
 	"author": "Developer-Mike",

@@ -10,7 +10,7 @@ export class ResultWidget extends WidgetType {
     super();
   }
 
-  toDOM(view: EditorView): HTMLElement {
+  toDOM(_view: EditorView): HTMLElement {
     document.removeEventListener("keydown", this.keyListener, true);
 
     const div = document.createElement("span");

@@ -2,13 +2,17 @@ import CalctexPlugin from "./main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface CalctexPluginSettings {
-  calculationTriggerString: string,
-  completionTriggerKey: string,
+  calculationTriggerString: string
+  completionTriggerKey: string
+  multiplicationSymbol: string
+  groupSeparator: string
 }
 
 export const DEFAULT_SETTINGS: Partial<CalctexPluginSettings> = {
   calculationTriggerString: "=",
-  completionTriggerKey: "Tab"
+  completionTriggerKey: "Tab",
+  multiplicationSymbol: "*",
+  groupSeparator: "'",
 };
 
 export class CalctexSettingTab extends PluginSettingTab {
@@ -45,6 +49,32 @@ export class CalctexSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.completionTriggerKey)
           .onChange(async (value) => {
             this.plugin.settings.completionTriggerKey = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Multiplication Symbol")
+      .setDesc("The symbol used for multiplication (e.g. * or \\times).")
+      .addText((text) =>
+        text
+          .setPlaceholder("Type a symbol here")
+          .setValue(this.plugin.settings.multiplicationSymbol)
+          .onChange(async (value) => {
+            this.plugin.settings.multiplicationSymbol = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Group Separator")
+      .setDesc("The symbol used for grouping numbers (e.g. ' or \\,).")
+      .addText((text) =>
+        text
+          .setPlaceholder("Type a symbol here")
+          .setValue(this.plugin.settings.groupSeparator)
+          .onChange(async (value) => {
+            this.plugin.settings.groupSeparator = value;
             await this.plugin.saveSettings();
           })
       );

@@ -66,8 +66,8 @@ class CalctexHintRenderer implements PluginValue {
             // Create a new calculation engine
             const calculationEngine = new ComputeEngine();
             calculationEngine.latexOptions = {
-              multiply: "*",
-              groupSeparator: "'",
+              multiply: CalctexPlugin.INSTANCE.settings.multiplicationSymbol,
+              groupSeparator: CalctexPlugin.INSTANCE.settings.groupSeparator,
             };
 
             let formattedFormula = formula.replace("\\\\", "").replace("&", "");

@@ -82,7 +82,7 @@ export class CalctexSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("decimal Separator")
+      .setName("Decimal Separator")
       .setDesc("The symbol used for defining where the decimal point is (e.g. , or .)")
       .addText((text) =>
         text

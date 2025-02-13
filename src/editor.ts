@@ -57,10 +57,18 @@ class CalctexHintRenderer implements PluginValue {
             let previousLatexLines = latexContentLines.slice(0, latexContentLines.indexOf(focusedLatexLine));
 
             // If not ending with the trigger symbol
-            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString)) return;
+            // if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString)) return;
+            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString) && !focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString)) return;
+
+            let isApproximation = focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString);
+
+            let calcTrigger = CalctexPlugin.INSTANCE.settings.calculationTriggerString;
+            if (isApproximation) {
+              calcTrigger = CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
+            }
 
             // Get the exact formula to calculate
-            let splitFormula = focusedLatexLine.split(CalctexPlugin.INSTANCE.settings.calculationTriggerString).filter((part) => part.replace("\\\\", "").trim().length > 0);
+            let splitFormula = focusedLatexLine.split(calcTrigger).filter((part) => part.replace("\\\\", "").trim().length > 0);
             let formula = splitFormula[splitFormula.length - 1];
 
             // Create a new calculation engine
@@ -92,7 +100,13 @@ class CalctexHintRenderer implements PluginValue {
             }
 
             // Calculate the expression
-            let result = expression.isValid ? expression.evaluate().latex : "⚡";
+            // let result = expression.isValid ? expression.evaluate().latex : "⚡";
+            let result = null;
+            if (isApproximation) {
+              result = expression.isValid ? expression.evaluate().N().latex : "⚡";
+            } else {
+              result = expression.isValid ? expression.evaluate().latex : "⚡";
+            }
 
             // Calculate the insertion index
             let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.replace("\\\\", "").trimEnd().length;

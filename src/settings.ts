@@ -3,6 +3,7 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface CalctexPluginSettings {
   calculationTriggerString: string
+  approxCalculationTriggerString: string
   completionTriggerKey: string
   multiplicationSymbol: string
   groupSeparator: string
@@ -11,6 +12,7 @@ export interface CalctexPluginSettings {
 
 export const DEFAULT_SETTINGS: Partial<CalctexPluginSettings> = {
   calculationTriggerString: "=",
+  approxCalculationTriggerString: "\\approx",
   completionTriggerKey: "Tab",
   multiplicationSymbol: "*",
   groupSeparator: "'",
@@ -38,6 +40,19 @@ export class CalctexSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.calculationTriggerString)
           .onChange(async (value) => {
             this.plugin.settings.calculationTriggerString = value;
+            await this.plugin.saveSettings();
+          })
+      );
+    
+    new Setting(containerEl)
+      .setName("Approximation Trigger String")
+      .setDesc("The string that triggers approximation.")
+      .addText((text) =>
+        text
+          .setPlaceholder("Type a string here")
+          .setValue(this.plugin.settings.approxCalculationTriggerString)
+          .onChange(async (value) => {
+            this.plugin.settings.approxCalculationTriggerString = value;
             await this.plugin.saveSettings();
           })
       );

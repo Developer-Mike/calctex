@@ -57,10 +57,20 @@ class CalctexHintRenderer implements PluginValue {
             let previousLatexLines = latexContentLines.slice(0, latexContentLines.indexOf(focusedLatexLine));
 
             // If not ending with the trigger symbol
-            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString)) return;
+            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString) && !focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString)) return;
+
+            const trimmedLatexLine = focusedLatexLine.replace("\\\\", "").trim();
+
+            let calcTrigger = null;
+            if (trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString))
+                calcTrigger = CalctexPlugin.INSTANCE.settings.calculationTriggerString;
+            else if (trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString))
+                calcTrigger = CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
+
+            if (calcTrigger == null) return;
 
             // Get the exact formula to calculate
-            let splitFormula = focusedLatexLine.split(CalctexPlugin.INSTANCE.settings.calculationTriggerString).filter((part) => part.replace("\\\\", "").trim().length > 0);
+            let splitFormula = focusedLatexLine.split(calcTrigger).filter((part) => part.replace("\\\\", "").trim().length > 0);
             let formula = splitFormula[splitFormula.length - 1];
 
             // Create a new calculation engine
@@ -92,7 +102,12 @@ class CalctexHintRenderer implements PluginValue {
             }
 
             // Calculate the expression
-            let result = expression.isValid ? expression.evaluate().latex : "⚡";
+            const isApproximation = calcTrigger === CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
+            let result = null;
+            if (expression.isValid) {
+                const evaluation = expression.evaluate();
+                result = (isApproximation ? evaluation.N() : evaluation).latex;
+              } else result = "⚡";
 
             // Calculate the insertion index
             let insertIndex = mathBegin + previousLatexLines.join("\n").length + focusedLatexLine.replace("\\\\", "").trimEnd().length;

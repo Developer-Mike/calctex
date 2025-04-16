@@ -1,5 +1,5 @@
 # Calctex
-An [Obsidian](https://obsidian.md/) plugin that automatically calculates the solution for your LaTeX formulas.
+An [Obsidian](https://obsidian.md/) plugin that automatically calculates the solution for your LaTeX formulas using the [CortexJS Compute Engine](https://cortexjs.io/compute-engine/).
 
 ## Usage
 To calculate the solution for a formula, simply add a `=` sign after the formula and the solution will be automatically calculated and displayed. If you want to write the solution to the document, just click on the solution or press the `Tab` key.

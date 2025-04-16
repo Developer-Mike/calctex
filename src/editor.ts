@@ -76,6 +76,7 @@ class CalctexHintRenderer implements PluginValue {
             // Create a new calculation engine
             const calculationEngine = new ComputeEngine();
             calculationEngine.latexOptions = {
+              decimalMarker: CalctexPlugin.INSTANCE.settings.decimalSeparator,
               multiply: CalctexPlugin.INSTANCE.settings.multiplicationSymbol,
               groupSeparator: CalctexPlugin.INSTANCE.settings.groupSeparator,
             };

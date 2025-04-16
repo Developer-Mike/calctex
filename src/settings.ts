@@ -7,6 +7,7 @@ export interface CalctexPluginSettings {
   completionTriggerKey: string
   multiplicationSymbol: string
   groupSeparator: string
+  decimalSeparator: string
 }
 
 export const DEFAULT_SETTINGS: Partial<CalctexPluginSettings> = {
@@ -15,6 +16,7 @@ export const DEFAULT_SETTINGS: Partial<CalctexPluginSettings> = {
   completionTriggerKey: "Tab",
   multiplicationSymbol: "*",
   groupSeparator: "'",
+  decimalSeparator: "."
 };
 
 export class CalctexSettingTab extends PluginSettingTab {
@@ -90,6 +92,19 @@ export class CalctexSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.groupSeparator)
           .onChange(async (value) => {
             this.plugin.settings.groupSeparator = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Decimal Separator")
+      .setDesc("The symbol used for defining where the decimal point is (e.g. , or .)")
+      .addText((text) =>
+        text
+          .setPlaceholder("Type a symbol here")
+          .setValue(this.plugin.settings.decimalSeparator)
+          .onChange(async (value) => {
+            this.plugin.settings.decimalSeparator = value;
             await this.plugin.saveSettings();
           })
       );

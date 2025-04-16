@@ -4,7 +4,7 @@
 	"version": "1.4.0",
 	"minAppVersion": "0.15.0",
 	"description": "Calculate LaTeX formulas inside Obsidian.",
-	"author": "Developer-Mike, Banana1093",
+	"author": "Developer-Mike",
 	"authorUrl": "https://github.com/Developer-Mike",
 	"isDesktopOnly": false
 }

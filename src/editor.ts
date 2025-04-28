@@ -54,20 +54,20 @@ class CalctexHintRenderer implements PluginValue {
             let focusedLatexLine = latexContentLines.find((_line, i) => 
               relativeCursorPos < latexContentLines.slice(0, i + 1).join("\n").length + 1
             ) ?? "";
+            const trimmedLatexLine = focusedLatexLine.replace("\\\\", "").trim();
             let previousLatexLines = latexContentLines.slice(0, latexContentLines.indexOf(focusedLatexLine));
 
             // If not ending with the trigger symbol
-            if (!focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString) && !focusedLatexLine.replace("\\\\", "").trim().endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString)) return;
-
-            const trimmedLatexLine = focusedLatexLine.replace("\\\\", "").trim();
+            if (!trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString) && !trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString)) return;
 
             let calcTrigger = null;
             if (trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.calculationTriggerString))
                 calcTrigger = CalctexPlugin.INSTANCE.settings.calculationTriggerString;
             else if (trimmedLatexLine.endsWith(CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString))
                 calcTrigger = CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
-
             if (calcTrigger == null) return;
+
+            const isApproximation = calcTrigger === CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
 
             // Get the exact formula to calculate
             let splitFormula = focusedLatexLine.split(calcTrigger).filter((part) => part.replace("\\\\", "").trim().length > 0);
@@ -80,6 +80,9 @@ class CalctexHintRenderer implements PluginValue {
               multiply: CalctexPlugin.INSTANCE.settings.multiplicationSymbol,
               groupSeparator: CalctexPlugin.INSTANCE.settings.groupSeparator,
             };
+
+            if (isApproximation && CalctexPlugin.INSTANCE.settings.approxDecimalPrecision !== -1)
+              calculationEngine.latexOptions.precision = CalctexPlugin.INSTANCE.settings.approxDecimalPrecision;
 
             let formattedFormula = formula.replace("\\\\", "").replace("&", "");
             let expression = calculationEngine.parse(formattedFormula);
@@ -103,7 +106,6 @@ class CalctexHintRenderer implements PluginValue {
             }
 
             // Calculate the expression
-            const isApproximation = calcTrigger === CalctexPlugin.INSTANCE.settings.approxCalculationTriggerString;
             let result = null;
             if (expression.isValid) {
                 const evaluation = expression.evaluate();

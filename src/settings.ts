@@ -4,6 +4,7 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 export interface CalctexPluginSettings {
   calculationTriggerString: string
   approxCalculationTriggerString: string
+  approxDecimalPrecision: number
   completionTriggerKey: string
   multiplicationSymbol: string
   groupSeparator: string
@@ -13,6 +14,7 @@ export interface CalctexPluginSettings {
 export const DEFAULT_SETTINGS: Partial<CalctexPluginSettings> = {
   calculationTriggerString: "=",
   approxCalculationTriggerString: "\\approx",
+  approxDecimalPrecision: 3,
   completionTriggerKey: "Tab",
   multiplicationSymbol: "*",
   groupSeparator: "'",
@@ -58,6 +60,19 @@ export class CalctexSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName("Approximation Precision")
+      .setDesc("The precision used when approximating (-1 for max).")
+      .addText((text) =>
+        text
+          .setPlaceholder("Type a number here")
+          .setValue(this.plugin.settings.approxDecimalPrecision.toString())
+          .onChange(async (value) => {
+            this.plugin.settings.approxDecimalPrecision = parseInt(value);
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
       .setName("Completion Trigger Key")
       .setDesc("The key that triggers completion.")
       .addText((text) =>
@@ -85,7 +100,7 @@ export class CalctexSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Group Separator")
-      .setDesc("The symbol used for grouping numbers (e.g. ' or \\,).")
+      .setDesc("The symbol used for grouping numbers (e.g. ' or ,).")
       .addText((text) =>
         text
           .setPlaceholder("Type a symbol here")

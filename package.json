@@ -22,6 +22,6 @@
 		"typescript": "4.7.4"
 	},
 	"dependencies": {
-		"@cortex-js/compute-engine": "^0.15.0"
+		"@cortex-js/compute-engine": "^0.29.1"
 	}
 }
